@@ -6,22 +6,16 @@ use Services\DB;
 
 class ProductModel extends Model
 {
-    public function single($id)
-    {
-        $result = DB::query("SELECT * FROM oc_product WHERE product_id = " . $id);
-        return $result->row;
-    }
-
     public function all($offset = 0, $limit = 5000)
     {
         $SQL = "SELECT 
-                        p.product_id as 'Id Товара', p.sku AS 'Артикул', p.jan AS 'Срок поставки', p.isbn AS 'Сущность', p.quantity AS 'Кол-во', p.image AS 'Картинка', p.price AS 'Цена', p.cost AS 'Закупка', p.base_price AS 'Базовая цена', p.base_currency_code AS 'Валюта', p.length AS 'Ширина', p.width AS 'Глубина', p.height AS 'Высота', p.status AS 'Статус', p.date_added AS 'Дата добавления', p.date_modified AS 'Дата изменения', p.setting AS 'Кастомные настройки', p.manufacturer_id AS 'Id Производитель', 
+                        p.product_id as 'Id Товара', p.sku AS 'Артикул', p.isbn AS 'Сущность', p.quantity AS 'Кол-во', p.image AS 'Картинка', p.price AS 'Цена', p.cost AS 'Закупка', p.base_price AS 'Базовая цена', p.base_currency_code AS 'Валюта', p.length AS 'Ширина', p.width AS 'Глубина', p.height AS 'Высота', p.status AS 'Статус', p.date_added AS 'Дата добавления', p.date_modified AS 'Дата изменения', p.setting AS 'Кастомные настройки', p.manufacturer_id AS 'Id Производитель', 
                         (SELECT `name`
                             FROM oc_manufacturer 
                             WHERE p.manufacturer_id = manufacturer_id LIMIT 0, 1) 
                             AS 'Производитель название',
                         p2c.category_id AS 'Id Категории',
-                        (SELECT cd.`name` FROM oc_category_description cd WHERE cd.category_id = p2c.category_id AND cd.language_id = 1 LIMIT 0, 1) AS 'Категория название',
+                        (SELECT `name` FROM oc_category_description WHERE p2c.category_id AND language_id = 1 LIMIT 0, 1) AS 'Категория название',
                         CASE 
                             WHEN p.isbn = 'combination'
                             THEN (SELECT GROUP_CONCAT(
